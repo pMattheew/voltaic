@@ -9,6 +9,7 @@ class CLI(Storage s)
                                 ";
 
     string? Result;
+    string? Error;
     readonly Storage Storage = s;
 
     public void Show()
@@ -23,7 +24,7 @@ class CLI(Storage s)
  ➜  3 • Remove processors
  ➜  4 • Buy processors
  ➜  5 • Sell processors
- {Result}
+ {Result + Error}
  ➜  0 • Exit");
         Console.Write("\n >  ");
 
@@ -53,10 +54,10 @@ class CLI(Storage s)
                 this.Result = "\n ⁜ Processor removed successfully! \n";
                 break;
             case 4:
-                Console.WriteLine("Buying...");
+                this.Buy();
                 break;
             case 5:
-                Console.WriteLine("Selling...");
+                this.Sell();
                 break;
             case 0:
                 Console.WriteLine("\n ⁜  Exiting Voltaic© CLI...\n ⁜  It is sad to see you go =(\n");
@@ -97,11 +98,12 @@ class CLI(Storage s)
 
     private void Buy()
     {
-
+        if(!this.Storage.HasProcessors()) this.Error = "\n ×  There is no products to buy. Try creating some.\n";
     }
 
     private void Sell()
     {
+        if(!this.Storage.HasProcessors()) this.Error = "\n ×  There is no products to sell. Try creating some.\n";
 
     }
 
