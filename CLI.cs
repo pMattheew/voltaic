@@ -1,4 +1,4 @@
-class CLI
+class CLI(Storage s)
 {
     const string CoolLogo = @" __      __   _ _        _      
  \ \    / /  | | |      (_)     
@@ -9,10 +9,11 @@ class CLI
                                 ";
 
     string? Result;
+    readonly Storage Storage = s;
+
     public void Show()
     {
-        Console.Clear();
-        Console.WriteLine(CoolLogo);
+        this.ResetView();
         Console.WriteLine(@$" ⁜ Welcome to Voltaic© CLI! ⁜
 
    Select an option to continue
@@ -36,15 +37,16 @@ class CLI
 
     private void Decide(int answer)
     {
+        this.ResetView();
         bool exit = false;
         switch (answer)
         {
             case 1:
-                Console.WriteLine("Creating...");
+                this.Create();
                 this.Result = "\n ⁜ Processor created successfully! \n";
                 break;
             case 2:
-                Console.WriteLine("Listing...");
+                this.List();
                 break;
             case 3:
                 Console.WriteLine("Removing...");
@@ -66,6 +68,46 @@ class CLI
     
     private void Create()
     {
+        this.Storage.Processors.Add(new Processor());
+    }
+
+    private void List()
+    {
         
+        bool exit = false;
+
+        while (!exit) 
+        {
+            Console.WriteLine($"\n ⁜  There are a total of {this.Storage.Processors.Count} processors:\n");
+            foreach (Processor p in this.Storage.Processors)
+            {
+                Console.WriteLine($" •  ({p.Architecture}) {p.ModelName} {p.NumberOfCores} core(s) {p.ClockSpeed} GHz | {p.Quantity} in storage");
+            }
+            Console.WriteLine("\nSend \"0\" to return.");
+            int res = Input.GetInt();
+            if(res == 0) exit = true;
+        }
+
+    }
+
+    private void Remove()
+    {
+
+    }
+
+    private void Buy()
+    {
+
+    }
+
+    private void Sell()
+    {
+
+    }
+
+    private void ResetView()
+    {
+        Console.Clear();
+        Console.WriteLine(CoolLogo);
     }
 }
