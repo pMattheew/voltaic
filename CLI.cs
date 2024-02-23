@@ -84,8 +84,7 @@ class CLI(Storage s)
             {
                 Console.WriteLine($" •  ({p.Architecture}) {p.ModelName} {p.NumberOfCores} core(s) {p.ClockSpeed} GHz | {p.Quantity} in storage");
             }
-            Console.WriteLine("\nSend \"0\" to return.");
-            int res = Input.GetInt();
+            int res = Input.GetInt("\nSend \"0\" to return.");
             if(res == 0) exit = true;
         }
 
