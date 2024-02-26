@@ -43,6 +43,10 @@ class Processor
         return result;
     }
 
+    public void Display()
+    {
+        Console.WriteLine($" ${this.Price} un. • {this.Quantity} in storage • [{this.Architecture}] {this.ModelName} {this.NumberOfCores} core(s) {this.ClockSpeed} GHz");
+    }
 
 
 }
