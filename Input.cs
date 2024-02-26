@@ -4,7 +4,8 @@ class Input
     {
         Console.WriteLine($"\n{sentence}");
         Console.Write("\n >  ");
-        return Console.ReadLine() ?? fallback;
+        string? res = Console.ReadLine();
+        return String.IsNullOrEmpty(res) ? fallback : res;
     }
 
     public static int GetInt(string sentence = "Enter an input:")
