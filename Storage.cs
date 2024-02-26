@@ -2,7 +2,7 @@ class Storage
 {
     public List<Processor> Processors = [];
 
-    string? Error;
+    public string? Error;
 
     public bool HasProcessors()
     {

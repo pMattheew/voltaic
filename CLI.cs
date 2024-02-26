@@ -1,3 +1,5 @@
+using System.Globalization;
+
 class CLI(Storage s)
 {
     const string CoolLogo = @" __      __   _ _        _      
@@ -9,7 +11,12 @@ class CLI(Storage s)
                                 ";
 
     string? Result;
-    string? Error;
+    string? _error;
+    string? Error
+    {
+        get { return _error; }
+        set { _error = $"\n ×  {value}\n"; }
+    }
     readonly Storage Storage = s;
 
     public void Show()
@@ -68,22 +75,24 @@ class CLI(Storage s)
         if (!exit) this.Show();
     }
 
-    private static void ResetView()
+    private void ResetView()
     {
         Console.Clear();
         Console.WriteLine(CoolLogo);
+        if (!String.IsNullOrEmpty(this.Storage.Error))
+            this.Error = this.Storage.Error;
     }
 
     private void ListProcessorsCLI()
     {
         bool back = false;
 
-        while (!back) 
+        while (!back)
         {
             Console.WriteLine($"\n ⁜  There are a total of {this.Storage.Processors.Count} processors:\n");
             this.Storage.ListProcessors();
             int res = Input.GetInt("\nSend \"0\" to return.");
-            if(res == 0) back = true;
+            if (res == 0) back = true;
         }
     }
 }
