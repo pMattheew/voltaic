@@ -29,8 +29,8 @@ class Storage
         this.Processors[processor].Quantity += quantity;
     }
 
-    public void Sell()
+    public void Sell(int processor, int quantity)
     {
-        
+        this.Processors[processor].Quantity -= quantity;
     }
 }

@@ -73,10 +73,10 @@ class CLI(Storage s)
                 this.Result = "Processor removed successfully!";
                 break;
             case 4:
-                this.BuyProcessorCLI();
+                this.TradeProcessorsCLI();
                 break;
             case 5:
-                this.Storage.Sell();
+                this.TradeProcessorsCLI(true);
                 break;
             case 0:
                 Console.WriteLine("\n ⁜  Exiting Voltaic© CLI...\n ⁜  It is sad to see you go =(\n");
@@ -105,27 +105,36 @@ class CLI(Storage s)
         }
     }
 
-    private void BuyProcessorCLI()
+    private void TradeProcessorsCLI(bool sell = false)
     {
         int total = this.Storage.Processors.Count;
 
-        void BuyProcessor(int index)
+        void TradeProcessor(int index)
         {
-            string model = this.Storage.Processors[index].ModelName;
-            Console.WriteLine($"\n •  Selected processor: \"{model}\"");
-            int quantity = Input.GetInt(" •  How many processors you'd like to buy?");
-            this.Storage.Buy(index, quantity);
-            this.Result = $"Purchase successful! You bought {quantity} processors model \"{model}\"";
+            Processor p = this.Storage.Processors[index];
+            string model = p.ModelName;
+            if (sell && p.Quantity == 0)
+                this.Error = $"You need to have at least one item of \"{model}\" in storage before selling.";
+            else
+            {
+                Console.WriteLine($"\n •  Selected processor: \"{model}\"");
+                int quantity = Input.GetInt($" •  How many processors you'd like to {(sell ? "sell" : "buy more")}?");
+                if (sell)
+                    this.Storage.Sell(index, quantity);
+                else
+                    this.Storage.Buy(index, quantity);
+                this.Result = $"{(sell ? "Sale" : "Purchase")} successful! You {(sell ? "sold" : "bought")} {quantity} processors model \"{model}\"";
+            }
         }
 
         if (total == 1)
-            BuyProcessor(0);
+            TradeProcessor(0);
         else
         {
             bool back = false;
             while (!back)
             {
-                Console.WriteLine($"\n ⁜  Choose which processor you want to buy more:\n");
+                Console.WriteLine($"\n ⁜  Choose which processor you want to {(sell ? "sell" : "buy")}:\n");
                 this.Storage.ListProcessors(true);
                 int res = Input.GetInt($"{Error} •  Send a listed number to select a processor\n •  Send \"0\" to return.");
                 if (res == 0)
@@ -137,7 +146,7 @@ class CLI(Storage s)
                     else
                     {
                         int index = res - 1;
-                        BuyProcessor(index);
+                        TradeProcessor(index);
                         back = true;
                     }
                 }
