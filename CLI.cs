@@ -66,10 +66,9 @@ class CLI(Storage s)
                 break;
             case 2:
                 this.ListProcessorsCLI();
-
                 break;
             case 3:
-                Console.WriteLine("Removing...");
+                this.RemoveProcessorCLI();
                 this.Result = "Processor removed successfully!";
                 break;
             case 4:
@@ -150,6 +149,24 @@ class CLI(Storage s)
                         back = true;
                     }
                 }
+            }
+        }
+    }
+
+    private void RemoveProcessorCLI()
+    {
+        bool back = false;
+        while (!back)
+        {
+            Console.WriteLine($"\n ⁜  Choose which processor you want to remove:\n");
+            this.Storage.ListProcessors(true);
+            int res = Input.GetInt($"{Error} •  Send a listed number to select a processor\n •  Send \"0\" to return.");
+            if (res == 0)
+                back = true;
+            else
+            {
+                this.Storage.RemoveProcessor(res - 1);
+                back = true;
             }
         }
     }

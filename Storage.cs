@@ -33,4 +33,9 @@ class Storage
     {
         this.Processors[index].Quantity -= quantity;
     }
+
+    public void RemoveProcessor (int index)
+    {
+        this.Processors.RemoveAt(index);
+    }
 }
