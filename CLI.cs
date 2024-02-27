@@ -45,7 +45,13 @@ class CLI(Storage s)
 
         int answer = Input.GetInt("");
 
-        this.Decide(answer);
+        if (answer >= 2 && answer <= 5 && !this.Storage.HasProcessors())
+        {
+            this.Error = "There is no processors to do this action. Try creating some.";
+            this.Show();
+        }
+        else
+            this.Decide(answer);
     }
 
     private void Decide(int answer)
@@ -103,12 +109,6 @@ class CLI(Storage s)
     {
         bool back = false;
         int total = this.Storage.Processors.Count;
-
-        if (!this.Storage.HasProcessors())
-        {
-            this.Error = "There is no processors to buy. Try creating some.";
-            back = true;
-        }
 
         while (!back)
         {
