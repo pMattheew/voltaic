@@ -107,29 +107,39 @@ class CLI(Storage s)
 
     private void BuyProcessorCLI()
     {
-        bool back = false;
         int total = this.Storage.Processors.Count;
 
-        while (!back)
+        void BuyProcessor(int index)
         {
-            Console.WriteLine($"\n ⁜  Choose which processor you want to buy more:\n");
-            this.Storage.ListProcessors(true);
-            int res = Input.GetInt($"{Error} •  Send a listed number to select a processor\n •  Send \"0\" to return.");
-            if (res == 0)
-                back = true;
-            else
+            string model = this.Storage.Processors[index].ModelName;
+            Console.WriteLine($"\n •  Selected processor: \"{model}\"");
+            int quantity = Input.GetInt(" •  How many processors you'd like to buy?");
+            this.Storage.Buy(index, quantity);
+            this.Result = $"Purchase successful! You bought {quantity} processors model \"{model}\"";
+        }
+
+        if (total == 1)
+            BuyProcessor(0);
+        else
+        {
+            bool back = false;
+            while (!back)
             {
-                if (res > total || res < 0)
-                    this.Error = $"You must select a processor between 1 and {total}";
+                Console.WriteLine($"\n ⁜  Choose which processor you want to buy more:\n");
+                this.Storage.ListProcessors(true);
+                int res = Input.GetInt($"{Error} •  Send a listed number to select a processor\n •  Send \"0\" to return.");
+                if (res == 0)
+                    back = true;
                 else
                 {
-                    int index = res - 1;
-                    string model = this.Storage.Processors[index].ModelName;
-                    Console.WriteLine($"\n •  Selected processor: {model}");
-                    int quantity = Input.GetInt(" •  How many processors you'd like to buy?");
-                    this.Storage.Buy(index, quantity);
-                    this.Result = $"Purchase successful! You bought {quantity} processors model \"{model}\"";
-                    back = true;
+                    if (res > total || res < 0)
+                        this.Error = $"You must select a processor between 1 and {total}";
+                    else
+                    {
+                        int index = res - 1;
+                        BuyProcessor(index);
+                        back = true;
+                    }
                 }
             }
         }
