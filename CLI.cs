@@ -10,12 +10,18 @@ class CLI(Storage s)
      \/ \___/|_|\__\__,_|_|\___|
                                 ";
 
-    string? Result;
     string? _error;
     string? Error
     {
         get { return _error; }
-        set { _error = $"\n ×  {value}\n"; }
+        set { _error = String.IsNullOrEmpty(value) ? "" : $"\n ×  {value}\n"; }
+    }
+
+    string? _result;
+    string? Result
+    {
+        get { return _result; }
+        set { _result = String.IsNullOrEmpty(value) ? "" : $"\n ⁜  {value}\n"; }
     }
     readonly Storage Storage = s;
 
@@ -33,14 +39,13 @@ class CLI(Storage s)
  ➜  5 • Sell processors
  {Result + Error}
  ➜  0 • Exit");
-        Console.Write("\n >  ");
 
-        string? input = Console.ReadLine();
+        this.Error = "";
+        this.Result = "";
 
-        if (int.TryParse(input, out int answer))
-            this.Decide(answer);
-        else
-            this.Show();
+        int answer = Input.GetInt("");
+
+        this.Decide(answer);
     }
 
     private void Decide(int answer)
@@ -51,7 +56,7 @@ class CLI(Storage s)
         {
             case 1:
                 this.Storage.CreateProcessor();
-                this.Result = "\n ⁜ Processor created successfully! \n";
+                this.Result = "Processor created successfully!";
                 break;
             case 2:
                 this.ListProcessorsCLI();
@@ -59,10 +64,10 @@ class CLI(Storage s)
                 break;
             case 3:
                 Console.WriteLine("Removing...");
-                this.Result = "\n ⁜ Processor removed successfully! \n";
+                this.Result = "Processor removed successfully!";
                 break;
             case 4:
-                this.Storage.Buy();
+                this.BuyProcessorCLI();
                 break;
             case 5:
                 this.Storage.Sell();
@@ -75,12 +80,10 @@ class CLI(Storage s)
         if (!exit) this.Show();
     }
 
-    private void ResetView()
+    private static void ResetView()
     {
         Console.Clear();
         Console.WriteLine(CoolLogo);
-        if (!String.IsNullOrEmpty(this.Storage.Error))
-            this.Error = this.Storage.Error;
     }
 
     private void ListProcessorsCLI()
@@ -91,8 +94,44 @@ class CLI(Storage s)
         {
             Console.WriteLine($"\n ⁜  There are a total of {this.Storage.Processors.Count} processors:\n");
             this.Storage.ListProcessors();
-            int res = Input.GetInt("\nSend \"0\" to return.");
+            int res = Input.GetInt("\n •  Send \"0\" to return.");
             if (res == 0) back = true;
+        }
+    }
+
+    private void BuyProcessorCLI()
+    {
+        bool back = false;
+        int total = this.Storage.Processors.Count;
+
+        if (!this.Storage.HasProcessors())
+        {
+            this.Error = "There is no processors to buy. Try creating some.";
+            back = true;
+        }
+
+        while (!back)
+        {
+            Console.WriteLine($"\n ⁜  Choose which processor you want to buy more:\n");
+            this.Storage.ListProcessors(true);
+            int res = Input.GetInt($"{Error} •  Send a listed number to select a processor\n •  Send \"0\" to return.");
+            if (res == 0)
+                back = true;
+            else
+            {
+                if (res > total || res < 0)
+                    this.Error = $"You must select a processor between 1 and {total}";
+                else
+                {
+                    int index = res - 1;
+                    string model = this.Storage.Processors[index].ModelName;
+                    Console.WriteLine($"\n •  Selected processor: {model}");
+                    int quantity = Input.GetInt(" •  How many processors you'd like to buy?");
+                    this.Storage.Buy(index, quantity);
+                    this.Result = $"Purchase successful! You bought {quantity} processors model \"{model}\"";
+                    back = true;
+                }
+            }
         }
     }
 }

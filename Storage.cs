@@ -14,21 +14,23 @@ class Storage
         this.Processors.Add(new Processor());
     }
 
-    public void ListProcessors()
+    public void ListProcessors(bool withIndex = false)
     {
-        foreach (Processor p in this.Processors)
+        for (int i = 0; i < this.Processors.Count; i++)
         {
-            p.Display();
+            if (withIndex)
+                Console.Write($" ({i + 1}) ➜  ");
+            this.Processors[i].Display();
         }
     }
 
-    public void Buy()
+    public void Buy(int processor, int quantity)
     {
-        if(!this.HasProcessors()) this.Error = "There is no products to buy. Try creating some.";
+        this.Processors[processor].Quantity += quantity;
     }
 
     public void Sell()
     {
-        if(!this.HasProcessors()) this.Error = "There is no products to sell. Try creating some.";
+        
     }
 }
