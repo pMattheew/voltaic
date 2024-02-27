@@ -24,13 +24,13 @@ class Storage
         }
     }
 
-    public void Buy(int processor, int quantity)
+    public void BuyProcessor(int index, int quantity)
     {
-        this.Processors[processor].Quantity += quantity;
+        this.Processors[index].Quantity += quantity;
     }
 
-    public void Sell(int processor, int quantity)
+    public void SellProcessor(int index, int quantity)
     {
-        this.Processors[processor].Quantity -= quantity;
+        this.Processors[index].Quantity -= quantity;
     }
 }
