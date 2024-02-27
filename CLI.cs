@@ -119,10 +119,14 @@ class CLI(Storage s)
                 Console.WriteLine($"\n •  Selected processor: \"{model}\"");
                 int quantity = Input.GetInt($" •  How many processors you'd like to {(sell ? "sell" : "buy more")}?");
                 if (sell)
-                    this.Storage.SellProcessor(index, quantity);
+                    if (quantity > p.Quantity)
+                        this.Error = $"You can't sell more than what you have. Try again with a lower number.";
+                    else
+                        this.Storage.SellProcessor(index, quantity);
                 else
                     this.Storage.BuyProcessor(index, quantity);
-                this.Result = $"{(sell ? "Sale" : "Purchase")} successful! You {(sell ? "sold" : "bought")} {quantity} processors model \"{model}\"";
+                if (String.IsNullOrEmpty(this.Error))
+                    this.Result = $"{(sell ? "Sale" : "Purchase")} successful! You {(sell ? "sold" : "bought")} {quantity} processors model \"{model}\"";
             }
         }
 
