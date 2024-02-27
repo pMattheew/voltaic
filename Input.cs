@@ -14,7 +14,8 @@ class Input
         bool isInt = false;
         while (!isInt)
         {
-            Console.WriteLine($"\n{sentence}");
+            if (!String.IsNullOrEmpty(sentence))
+                Console.WriteLine($"\n{sentence}");
             Console.Write("\n >  ");
             string? input = Console.ReadLine();
 
